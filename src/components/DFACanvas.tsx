@@ -1,3 +1,5 @@
+import { getArrowPoints } from "../utils/arrow";
+
 function DFACanvas() {
 
     type state = {
@@ -6,13 +8,26 @@ function DFACanvas() {
         y: number;
         color: string;
         radius: number;
-    }[]
+    }[];
+
+    type Transition = {
+        from: string;
+        to: string;
+        label: string;
+    };
 
     const states:state = [
         { id: "q0", x: 120, y: 100, color: "lightyellow", radius: 30 },
         { id: "q1", x: 280, y: 100, color: "lightgreen", radius: 30 },
       ];
 
+    const transitions: Transition[] = [
+      { from: "q0", to: "q1", label: "a" },
+    ];
+
+    const getState = (id: string) =>
+        states.find((s) => s.id === id)!;
+      
 
     return (
         <svg width="400" height="200" style={{ border: "1px solid black" }}>
@@ -30,15 +45,33 @@ function DFACanvas() {
               </marker>
             </defs>
 
+            {transitions.map((t,i)=> {
+                const from = getState(t.from);
+                const to = getState(t.to);
 
-            <line
-                x1={states[0].x}
-                y1={states[0].y}
-                x2={states[1].x - states[1].radius}
-                y2={states[1].y}
-                stroke="black"
-                markerEnd="url(#arrow)"
-             />
+                const { startX, startY, endX, endY } = getArrowPoints(from, to);
+
+                return (
+                    <g key={i}>
+                        <line
+                          x1={startX}
+                          y1={startY}
+                          x2={endX}
+                          y2={endY}
+                          stroke="black"
+                          markerEnd="url(#arrow)"
+                        />
+                        <text
+                          x={(from.x + to.x) / 2}
+                          y={from.y - 10}
+                          textAnchor="middle"
+                          fontSize="14"
+                        >
+                          {t.label}
+                        </text>
+                    </g>
+                );
+            })}
 
             {states.map((state) => (
                 <g key={state.id}>
