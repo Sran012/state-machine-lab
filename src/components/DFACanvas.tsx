@@ -27,10 +27,12 @@ function DFACanvas() {
   const states: state = [
     { id: "q0", x: 120, y: 100, color: "lightyellow", radius: 30 },
     { id: "q1", x: 280, y: 100, color: "lightyellow", radius: 30 },
+    { id: "qd", x: 200, y: 160, color: "red", radius: 20 },
   ];
 
   const transitions: Transition[] = [
     { from: "q0", to: "q1", label: "a" },
+    { from: "q1", to: "q0", label: "a" }
   ];
 
   const getState = (id: string) =>
@@ -134,7 +136,7 @@ function DFACanvas() {
           <g key={state.id}
             onClick={() => setCurrentState(state.id)}
             style={{ cursor: "pointer" }}>
-            <circle cx={state.x} cy={state.y} r={30} stroke="black" strokeWidth="2" fill={state.id === CurrentState ? "orange" : state.color} />
+            <circle cx={state.x} cy={state.y} r={state.radius} stroke="black" strokeWidth="2" fill={state.id === CurrentState ? "orange" : state.color} />
             {finalStates.includes(state.id) && (
               <circle
                 cx={state.x}
