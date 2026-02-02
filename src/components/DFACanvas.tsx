@@ -117,6 +117,8 @@ function DFACanvas() {
           const isBackward = from.x > to.x;
 
           const { startX, startY, endX, endY } = getArrowPoints(from, to);
+
+          const isActive = activeTransition && activeTransition.from === t.from && activeTransition.to === t.to && activeTransition.label === t.label;
           
 
           return (
@@ -137,7 +139,8 @@ function DFACanvas() {
                     y1={startY}
                     x2={endX}
                     y2={endY}
-                    stroke="black"
+                    stroke={isActive ? "orange" : "black"}
+                    strokeWidth={isActive ? 3 : 1.5}
                     markerEnd="url(#arrow)"
                   />
                   <text
@@ -145,6 +148,7 @@ function DFACanvas() {
                     y={(startY + endY) / 2 - 8}
                     textAnchor="middle"
                     fontSize="14"
+                    fill={isActive ? "orange" : "black"}
                   >
                     {t.label}
                   </text>
@@ -159,7 +163,8 @@ function DFACanvas() {
                       ${endX} ${endY}
                     `}
                     fill="none"
-                    stroke="black"
+                    stroke={isActive ? "orange" : "black"}
+                    strokeWidth={isActive ? 3 : 1.5}
                     markerEnd="url(#arrow)"
                   />
                   <text
@@ -167,6 +172,7 @@ function DFACanvas() {
                     y={startY - 40}
                     textAnchor="middle"
                     fontSize="14"
+                    fill={isActive ? "orange" : "black"}
                   >
                     {t.label}
                   </text>
