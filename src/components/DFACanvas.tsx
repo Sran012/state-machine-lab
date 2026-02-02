@@ -32,7 +32,9 @@ function DFACanvas() {
 
   const transitions: Transition[] = [
     { from: "q0", to: "q1", label: "a" },
-    { from: "q1", to: "q0", label: "a" }
+    { from: "q1", to: "q0", label: "b" },
+    { from: "qd", to: "qd", label: "a" },
+    { from: "qd", to: "qd", label: "b" },
   ];
 
   const getState = (id: string) =>
