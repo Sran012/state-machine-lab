@@ -1,6 +1,8 @@
 # State-machine-lab 
 
 A **visual, interactive DFA (Deterministic Finite Automaton) simulator** built with **React + TypeScript + SVG**.
+<img width="905" height="537" alt="image" src="https://github.com/user-attachments/assets/1dbdb87c-481b-4698-aaf7-9129bb05436b" />
+
 
 designed to:
 - help beginners **understand Automata Theory visually**
