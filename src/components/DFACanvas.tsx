@@ -8,6 +8,8 @@ function DFACanvas() {
   const [Input, setInput] = useState<string>("");
   const [Index, setIndex] = useState<number>(0);
   const [CurrentState, setCurrentState] = useState<string>(startState);
+  const [activeTransition, setActiveTransition] = useState<Transition | null>(null);
+
 
 
   type state = {
@@ -48,13 +50,15 @@ function DFACanvas() {
     const transition = transitions.find(
       (t) => t.from === CurrentState && t.label === symbol
     );
-
+    
     if (!transition) {
+      setActiveTransition(null);
       setCurrentState("qd");
       setIndex(Index + 1);
       return;
     }
-
+    
+    setActiveTransition(transition);
     setCurrentState(transition.to);
     setIndex(Index + 1);
   };
