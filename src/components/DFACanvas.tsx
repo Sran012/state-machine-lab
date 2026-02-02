@@ -5,23 +5,39 @@ function DFACanvas() {
         x: number;
         y: number;
         color: string;
+        radius: number;
     }[]
 
     const states:state = [
-        { id: "q0", x: 120, y: 100, color: "lightyellow" },
-        { id: "q1", x: 280, y: 100, color: "lightgreen" },
+        { id: "q0", x: 120, y: 100, color: "lightyellow", radius: 30 },
+        { id: "q1", x: 280, y: 100, color: "lightgreen", radius: 30 },
       ];
 
 
     return (
         <svg width="400" height="200" style={{ border: "1px solid black" }}>
 
+            <defs>
+              <marker
+                id="arrow"
+                markerWidth="30"
+                markerHeight="30"
+                refX="8"
+                refY="5"
+                orient="auto"
+              >
+                <path d="M0,0 L10,5 L0,10 Z" fill="black" />
+              </marker>
+            </defs>
+
+
             <line
                 x1={states[0].x}
                 y1={states[0].y}
-                x2={states[1].x}
+                x2={states[1].x - states[1].radius}
                 y2={states[1].y}
                 stroke="black"
+                markerEnd="url(#arrow)"
              />
 
             {states.map((state) => (
