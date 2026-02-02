@@ -110,27 +110,63 @@ function DFACanvas() {
         {transitions.map((t, i) => {
           const from = getState(t.from);
           const to = getState(t.to);
+          const isBackward = from.x > to.x;
 
           const { startX, startY, endX, endY } = getArrowPoints(from, to);
+          
 
           return (
             <g key={i}>
-              <line
+              {/* <line
                 x1={startX}
                 y1={startY}
                 x2={endX}
                 y2={endY}
                 stroke="black"
                 markerEnd="url(#arrow)"
-              />
-              <text
-                x={(from.x + to.x) / 2}
-                y={from.y - 10}
-                textAnchor="middle"
-                fontSize="14"
-              >
-                {t.label}
-              </text>
+              /> */}
+              {!isBackward ? (
+                // STRAIGHT ARROW
+                <>
+                  <line
+                    x1={startX}
+                    y1={startY}
+                    x2={endX}
+                    y2={endY}
+                    stroke="black"
+                    markerEnd="url(#arrow)"
+                  />
+                  <text
+                    x={(startX + endX) / 2}
+                    y={(startY + endY) / 2 - 8}
+                    textAnchor="middle"
+                    fontSize="14"
+                  >
+                    {t.label}
+                  </text>
+                </>
+              ) : (
+                // CURVED ARROW (BACKWARD)
+                <>
+                  <path
+                    d={`
+                      M ${startX} ${startY}
+                      Q ${(startX + endX) / 2} ${startY - 60}
+                      ${endX} ${endY}
+                    `}
+                    fill="none"
+                    stroke="black"
+                    markerEnd="url(#arrow)"
+                  />
+                  <text
+                    x={(startX + endX) / 2}
+                    y={startY - 40}
+                    textAnchor="middle"
+                    fontSize="14"
+                  >
+                    {t.label}
+                  </text>
+                </>)}
             </g>
           );
         })}
