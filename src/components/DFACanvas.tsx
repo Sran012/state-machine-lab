@@ -1,6 +1,12 @@
+import {useState} from "react";
 import { getArrowPoints } from "../utils/arrow";
 
 function DFACanvas() {
+    const [CurrentState, setCurrentState] = useState<string>("q0");
+
+    const startState = "q0";
+    const finalStates = ["q1"];
+
 
     type state = {
         id: string;
@@ -18,7 +24,7 @@ function DFACanvas() {
 
     const states:state = [
         { id: "q0", x: 120, y: 100, color: "lightyellow", radius: 30 },
-        { id: "q1", x: 280, y: 100, color: "lightgreen", radius: 30 },
+        { id: "q1", x: 280, y: 100, color: "lightyellow", radius: 30 },
       ];
 
     const transitions: Transition[] = [
@@ -44,6 +50,21 @@ function DFACanvas() {
                 <path d="M0,0 L10,5 L0,10 Z" fill="black" />
               </marker>
             </defs>
+
+            {states.map((state) => {
+              if (state.id !== startState) return null;
+              return (
+                <line
+                  key="start-arrow"
+                  x1={state.x - state.radius - 30}
+                  y1={state.y}
+                  x2={state.x - state.radius}
+                  y2={state.y}
+                  stroke="black"
+                  markerEnd="url(#arrow)"
+                />
+                );
+              })}
 
             {transitions.map((t,i)=> {
                 const from = getState(t.from);
@@ -74,8 +95,20 @@ function DFACanvas() {
             })}
 
             {states.map((state) => (
-                <g key={state.id}>
-                    <circle cx={state.x} cy={state.y} r={30} stroke="black" strokeWidth="2" fill={state.color} />
+                <g key={state.id}
+                    onClick={() => setCurrentState(state.id)}
+                    style={{ cursor: "pointer" }}>
+                    <circle cx={state.x} cy={state.y} r={30} stroke="black" strokeWidth="2" fill={state.id === CurrentState ? "orange" : state.color} />
+                    {finalStates.includes(state.id) && (
+                      <circle
+                        cx={state.x}
+                        cy={state.y}
+                        r={state.radius - 5}
+                        stroke="black"
+                        strokeWidth="2"
+                        fill="none"
+                      />
+                    )}
                     <text x={state.x} y={state.y} textAnchor="middle" dominantBaseline="middle" fontSize="16">
                         {state.id}
                     </text>
