@@ -50,7 +50,8 @@ function DFACanvas() {
     );
 
     if (!transition) {
-      alert("No transition found!");
+      setCurrentState("qd");
+      setIndex(Index + 1);
       return;
     }
 
