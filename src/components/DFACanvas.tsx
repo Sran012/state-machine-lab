@@ -33,7 +33,7 @@ function DFACanvas() {
 
     const timer = setTimeout(() => {
       step();
-    }, 800); // speed (ms)
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [isRunning, Index, Input, CurrentState]);
@@ -114,6 +114,25 @@ function DFACanvas() {
           />
           <button onClick={step} style={{ padding: "4px 8px 4px 8px" }}>Step</button>
         </div>
+        <br></br>
+        <div style={{ marginTop: "10px", fontSize: "18px" }}>
+          {Input.split("").map((char, i) => (
+            <span
+              key={i}
+              style={{
+                padding: "4px",
+                marginRight: "4px",
+                borderBottom:
+                  i === Index ? "3px solid orange" : "3px solid transparent",
+                color: i < Index ? "#999" : "black",
+                fontWeight: i === Index ? "bold" : "normal",
+              }}
+            >
+              {char}
+            </span>
+          ))}
+        </div>
+
         <br></br>
         <div style={{ display: "inline-flex", gap: "8px", marginTop: "8px", marginBottom: "8px" }}>
           <button onClick={() => setIsRunning(true)} disabled={isRunning} style={{ padding: "4px 8px 4px 8px" }}>
