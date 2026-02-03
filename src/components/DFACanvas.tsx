@@ -10,9 +10,10 @@ function DFACanvas() {
   const [CurrentState, setCurrentState] = useState<string>(startState);
   const [activeTransition, setActiveTransition] = useState<Transition | null>(null);
   const [result, setResult] = useState<"ACCEPT" | "REJECT" | null>(null);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
 
   useEffect(() => {
-    if(Index === Input.length && Input.length > 0){
+    if (Index === Input.length && Input.length > 0) {
       if (finalStates.includes(CurrentState)) {
         setResult("ACCEPT");
       }
@@ -20,7 +21,23 @@ function DFACanvas() {
         setResult("REJECT");
       }
     }
-  },[Index,Input,CurrentState]);
+  }, [Index, Input, CurrentState]);
+
+  useEffect(() => {
+    if (!isRunning) return;
+
+    if (Index >= Input.length) {
+      setIsRunning(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      step();
+    }, 800); // speed (ms)
+
+    return () => clearTimeout(timer);
+  }, [isRunning, Index, Input, CurrentState]);
+
 
 
   type state = {
@@ -80,20 +97,35 @@ function DFACanvas() {
   return (
     <>
       <div>
-        <input
-          type="text"
-          value={Input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            setIndex(0);
-            setCurrentState(startState);
-            setActiveTransition(null);
-            setResult(null);
-          }}
-          placeholder="Enter string"
-        />
-        <button onClick={step}>Step</button>
+        <div style={{ display: "inline-flex", gap: "10px", alignItems: "center" }}>
+          <input
+            type="text"
+            value={Input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              setIndex(0);
+              setCurrentState(startState);
+              setActiveTransition(null);
+              setResult(null);
+            }}
+            placeholder="Enter string"
+            disabled={isRunning}
+            style={{ border: "1px solid black", padding: "4px 8px 4px 8px", borderRadius: "6px" }}
+          />
+          <button onClick={step} style={{ padding: "4px 8px 4px 8px" }}>Step</button>
+        </div>
+        <br></br>
+        <div style={{ display: "inline-flex", gap: "8px", marginTop: "8px", marginBottom: "8px" }}>
+          <button onClick={() => setIsRunning(true)} disabled={isRunning} style={{ padding: "4px 8px 4px 8px" }}>
+            ▶ Play
+          </button>
+
+          <button onClick={() => setIsRunning(false)} disabled={!isRunning} style={{ padding: "4px 8px 4px 8px" }}>
+            ⏸ Pause
+          </button>
+        </div>
       </div>
+
 
       {result && (
         <div
