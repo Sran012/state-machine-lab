@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getArrowPoints } from "../utils/arrow";
 
 function DFACanvas() {
@@ -11,7 +11,16 @@ function DFACanvas() {
   const [activeTransition, setActiveTransition] = useState<Transition | null>(null);
   const [result, setResult] = useState<"ACCEPT" | "REJECT" | null>(null);
 
-
+  useEffect(() => {
+    if(Index === Input.length && Input.length > 0){
+      if (finalStates.includes(CurrentState)) {
+        setResult("ACCEPT");
+      }
+      else {
+        setResult("REJECT");
+      }
+    }
+  },[Index,Input,CurrentState]);
 
 
   type state = {
@@ -45,15 +54,7 @@ function DFACanvas() {
     states.find((s) => s.id === id)!;
 
   const step = () => {
-    if (Index === Input.length){
-      if (finalStates.includes(CurrentState)) {
-        setResult("ACCEPT");
-      }
-      else {
-        setResult("REJECT");
-      }
-      return;
-    }
+    if (Index >= Input.length) return;
 
     const symbol = Input[Index];
 
