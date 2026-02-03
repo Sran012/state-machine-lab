@@ -9,6 +9,8 @@ function DFACanvas() {
   const [Index, setIndex] = useState<number>(0);
   const [CurrentState, setCurrentState] = useState<string>(startState);
   const [activeTransition, setActiveTransition] = useState<Transition | null>(null);
+  const [result, setResult] = useState<"ACCEPT" | "REJECT" | null>(null);
+
 
 
 
@@ -43,24 +45,33 @@ function DFACanvas() {
     states.find((s) => s.id === id)!;
 
   const step = () => {
-    if (Index >= Input.length) return;
+    if (Index === Input.length){
+      if (finalStates.includes(CurrentState)) {
+        setResult("ACCEPT");
+      }
+      else {
+        setResult("REJECT");
+      }
+      return;
+    }
 
     const symbol = Input[Index];
 
     const transition = transitions.find(
       (t) => t.from === CurrentState && t.label === symbol
     );
-    
+
     if (!transition) {
       setActiveTransition(null);
       setCurrentState("qd");
       setIndex(Index + 1);
       return;
     }
-    
+
     setActiveTransition(transition);
     setCurrentState(transition.to);
     setIndex(Index + 1);
+
   };
 
 
@@ -75,11 +86,29 @@ function DFACanvas() {
             setInput(e.target.value);
             setIndex(0);
             setCurrentState(startState);
+            setActiveTransition(null);
+            setResult(null);
           }}
           placeholder="Enter string"
         />
         <button onClick={step}>Step</button>
       </div>
+
+      {result && (
+        <div
+          style={{
+            marginTop: "10px",
+            padding: "8px",
+            fontWeight: "bold",
+            color: result === "ACCEPT" ? "green" : "red",
+            border: `2px solid ${result === "ACCEPT" ? "green" : "red"}`,
+            width: "fit-content",
+          }}
+        >
+          {result}
+        </div>
+      )}
+
 
       <svg width="400" height="200" style={{ border: "1px solid black" }}>
 
@@ -119,7 +148,7 @@ function DFACanvas() {
           const { startX, startY, endX, endY } = getArrowPoints(from, to);
 
           const isActive = activeTransition && activeTransition.from === t.from && activeTransition.to === t.to && activeTransition.label === t.label;
-          
+
 
           return (
             <g key={i}>
