@@ -93,9 +93,72 @@ function DFACanvas() {
   };
 
 
+  const getTransition = (stateId: string, symbol: string) => {
+    const t = transitions.find(
+      (tr) => tr.from === stateId && tr.label === symbol
+    );
+    return t ? t.to : "—";
+  };
+  
+
+  const alphabet = Array.from(
+    new Set(transitions.map(t => t.label))
+  );
 
   return (
     <>
+      <table
+  border={1}
+  cellPadding={8}
+  style={{ marginTop: "20px", borderCollapse: "collapse" }}
+>
+  <thead>
+    <tr>
+      <th>State</th>
+      {alphabet.map((sym) => (
+        <th key={sym}>{sym}</th>
+      ))}
+    </tr>
+  </thead>
+
+  <tbody>
+    {states.map((s) => (
+      <tr
+        key={s.id}
+        style={{
+          background:
+            s.id === CurrentState ? "#ffe0b2" : "transparent",
+        }}
+      >
+        <td><b>{s.id}</b></td>
+
+        {alphabet.map((sym) => {
+          const target = getTransition(s.id, sym);
+
+          const isActiveCell =
+            activeTransition &&
+            activeTransition.from === s.id &&
+            activeTransition.label === sym;
+
+          return (
+            <td
+              key={sym}
+              style={{
+                background: isActiveCell ? "orange" : "transparent",
+                fontWeight: isActiveCell ? "bold" : "normal",
+              }}
+            >
+              {target}
+            </td>
+          );
+        })}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+
+
       <div>
         <div style={{ display: "inline-flex", gap: "10px", alignItems: "center" }}>
           <input
