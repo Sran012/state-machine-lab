@@ -1,11 +1,11 @@
 
 import './App.css'
-import DFACanvas from './components/DFACanvas'
+import DFAVisualizer from './components/DFAVisualizer'
 
 function App() {
   return (
     <>
-      <DFACanvas/>
+      <DFAVisualizer/>
     </>
   )
 }
